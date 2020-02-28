@@ -25,7 +25,7 @@ namespace WindowsFormsApp1
 
         }
 
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e) 
         {
 
         }
@@ -35,6 +35,7 @@ namespace WindowsFormsApp1
             conn.Open();
             SqlCommand comm = new SqlCommand("", conn);
             conn.Close();
+            ///
         }
     }
 }
