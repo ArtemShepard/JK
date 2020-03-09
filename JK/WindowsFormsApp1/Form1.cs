@@ -39,5 +39,36 @@ namespace WindowsFormsApp1
             Form2 newJK = new Form2();
             newJK.Show();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Form3 redact = new Form3();
+            int selectedRow = dataGridView1.CurrentRow.Index;
+            redact.JKname = dataGridView1[0, selectedRow].Value.ToString();
+            redact.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            int selectedRow = dataGridView1.CurrentRow.Index;
+            string JKname = dataGridView1[0, selectedRow].Value.ToString();
+
+            DialogResult dialogResult = MessageBox.Show("Вы действительно хотите удалить эту запись?", "Подтвердите удаление", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                conn.Open();
+
+                SqlCommand com = new SqlCommand($"DELETE FROM houses_in_complexes WHERE [Название ЖК] = '{JKname}'", conn);
+                com.ExecuteNonQuery();
+
+                com = new SqlCommand("select [houses_in_complexes].[Название ЖК],[houses_in_complexes].[Статус строительства ЖК],(select COUNT([id]) from [practica_2].[dbo].[houses_in_complexes] where [houses_in_complexes].[id] = [houses_in_complexes].[id]),[houses_in_complexes].[Город] FROM [practica_2].[dbo].[houses_in_complexes]", conn);
+                SqlDataReader dr = com.ExecuteReader();
+                dataGridView1.Rows.Clear();
+                while (dr.Read())
+                    dataGridView1.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2].ToString(), dr[3]);
+
+                conn.Close();
+            }
+        }
     }
 }
